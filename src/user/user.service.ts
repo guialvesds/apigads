@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
