@@ -8,6 +8,12 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto extends User {
+  @IsString()
+  primary_name: string;
+
+  @IsString()
+  second_name: string;
+
   @IsEmail()
   email: string;
 
@@ -18,10 +24,4 @@ export class CreateUserDto extends User {
     message: 'Senha muito fraca.',
   })
   password: string;
-
-  @IsString()
-  primary_name: string;
-
-  @IsString()
-  second_name: string;
 }
