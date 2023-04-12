@@ -6,9 +6,11 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt_auth.guard';
+import { DesktopModule } from './desktop/desktop.module';
+import { CardModule } from './card/card.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule],
+  imports: [PrismaModule, UserModule, AuthModule, DesktopModule, CardModule],
   controllers: [AppController],
   providers: [
     AppService,

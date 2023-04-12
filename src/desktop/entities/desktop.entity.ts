@@ -1,5 +1,5 @@
-import { Card } from './card.entity';
-import { User } from './user.entity';
+import { Card } from '../../card/entities/card.entity';
+import { User } from '../../user/entities/user.entity';
 
 export class Desktop {
   id?: number;
