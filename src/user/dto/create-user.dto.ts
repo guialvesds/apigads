@@ -24,4 +24,5 @@ export class CreateUserDto extends User {
     message: 'Senha muito fraca.',
   })
   password: string;
+  desktop: any;
 }
