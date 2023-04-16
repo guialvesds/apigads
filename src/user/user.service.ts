@@ -8,30 +8,33 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const data: Prisma.usersCreateInput = {
-      ...createUserDto,
-      password: await bcrypt.hash(createUserDto.password, 10),
-    };
+    try {
+      const data: Prisma.usersCreateInput = {
+        ...createUserDto,
+        password: await bcrypt.hash(createUserDto.password, 10),
+      };
 
-    const createdUser = await this.prisma.users.create({ data });
+      const createdUser = await this.prismaService.users.create({ data });
 
-    return {
-      ...createdUser,
-      password: undefined,
-    };
+      return {
+        ...createdUser,
+      };
+    } catch (error) {
+      console.log('Erro ao criar usuáro: ', error);
+    }
   }
 
   findByEmail(email: string) {
-    return this.prisma.users.findUnique({
+    return this.prismaService.users.findUnique({
       where: { email },
     });
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.prismaService.users.findMany();
   }
 
   findOne(id: number) {

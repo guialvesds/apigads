@@ -6,7 +6,6 @@ CREATE TABLE "users" (
     "email" VARCHAR(100) NOT NULL,
     "password" VARCHAR(8) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "desktop_id" INTEGER NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -80,9 +79,6 @@ CREATE TABLE "file" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
--- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "desktop"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "card" ADD CONSTRAINT "card_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "desktop"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
