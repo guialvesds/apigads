@@ -10,7 +10,7 @@ import { DesktopModule } from './desktop/desktop.module';
 import { CardModule } from './card/card.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, DesktopModule, CardModule],
+  imports: [PrismaModule, UserModule, AuthModule, CardModule, DesktopModule],
   controllers: [AppController],
   providers: [
     AppService,

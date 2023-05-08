@@ -27,29 +27,29 @@ model desktop {
   created_at  DateTime @default(now())
   link_access String   @db.VarChar(240)
   card        card[]
-  desktop     users?   @relation(fields: [desktop_id], references: [id])
-  desktop_id  Int?
+  desktop     users    @relation(fields: [desktop_id], references: [id])
+  desktop_id  Int
 }
 
 model card {
-  id            Int        @id @default(autoincrement())
-  title         String     @db.VarChar(200)
-  description   String     @db.Text
-  desktop       desktop?   @relation(fields: [desktop_id], references: [id])
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(200)
+  description   String   @db.Text()
+  desktop       desktop  @relation(fields: [desktop_id], references: [id])
   desktop_id    Int
-  members       Int
-  created_at    DateTime   @default(now())
+  created_at    DateTime @default(now())
   delivery_date DateTime
-  comment       comment[]
-  listTask      listTask[]
-  file          file[]
+
+  listTask listTask[]
+  comment  comment[]
+  file     file[]
 }
 
 model listTask {
   id      Int    @id @default(autoincrement())
   name    String @db.VarChar(60)
   task    task[]
-  card    card?  @relation(fields: [card_id], references: [id])
+  card    card   @relation(fields: [card_id], references: [id])
   card_id Int
 }
 

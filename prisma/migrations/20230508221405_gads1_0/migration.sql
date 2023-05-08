@@ -4,7 +4,7 @@ CREATE TABLE "users" (
     "primary_name" VARCHAR(20) NOT NULL,
     "second_name" VARCHAR(20) NOT NULL,
     "email" VARCHAR(100) NOT NULL,
-    "password" VARCHAR(8) NOT NULL,
+    "password" VARCHAR(240) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -17,6 +17,7 @@ CREATE TABLE "desktop" (
     "user_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "link_access" VARCHAR(240) NOT NULL,
+    "desktop_id" INTEGER NOT NULL,
 
     CONSTRAINT "desktop_pkey" PRIMARY KEY ("id")
 );
@@ -27,7 +28,6 @@ CREATE TABLE "card" (
     "title" VARCHAR(200) NOT NULL,
     "description" TEXT NOT NULL,
     "desktop_id" INTEGER NOT NULL,
-    "members" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "delivery_date" TIMESTAMP(3) NOT NULL,
 
@@ -38,7 +38,6 @@ CREATE TABLE "card" (
 CREATE TABLE "listTask" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(60) NOT NULL,
-    "card_id" INTEGER NOT NULL,
 
     CONSTRAINT "listTask_pkey" PRIMARY KEY ("id")
 );
@@ -62,7 +61,6 @@ CREATE TABLE "comment" (
     "userId" INTEGER NOT NULL,
     "comment_text" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "card_id" INTEGER NOT NULL,
 
     CONSTRAINT "comment_pkey" PRIMARY KEY ("id")
 );
@@ -72,7 +70,6 @@ CREATE TABLE "file" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(240) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "card_id" INTEGER NOT NULL,
 
     CONSTRAINT "file_pkey" PRIMARY KEY ("id")
 );
@@ -81,16 +78,10 @@ CREATE TABLE "file" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
+ALTER TABLE "desktop" ADD CONSTRAINT "desktop_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "card" ADD CONSTRAINT "card_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "desktop"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "listTask" ADD CONSTRAINT "listTask_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "card"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "task" ADD CONSTRAINT "task_todo_id_fkey" FOREIGN KEY ("todo_id") REFERENCES "listTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "comment" ADD CONSTRAINT "comment_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "card"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "file" ADD CONSTRAINT "file_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "card"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
