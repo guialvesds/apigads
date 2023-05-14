@@ -11,13 +11,12 @@ datasource db {
 }
 
 model users {
-  id           Int       @id @default(autoincrement())
-  primary_name String    @db.VarChar(20)
-  second_name  String    @db.VarChar(20)
-  email        String    @unique @db.VarChar(100)
-  password     String    @db.VarChar(240)
-  created_at   DateTime  @default(now())
-  desktop      desktop[]
+  id           Int      @id @default(autoincrement())
+  primary_name String   @db.VarChar(20)
+  second_name  String   @db.VarChar(20)
+  email        String   @unique @db.VarChar(100)
+  password     String   @db.VarChar(240)
+  created_at   DateTime @default(now())
 }
 
 model desktop {
@@ -27,41 +26,30 @@ model desktop {
   created_at  DateTime @default(now())
   link_access String   @db.VarChar(240)
   card        card[]
-  desktop     users    @relation(fields: [desktop_id], references: [id])
-  desktop_id  Int
 }
 
 model card {
-  id            Int      @id @default(autoincrement())
-  title         String   @db.VarChar(200)
-  description   String   @db.Text()
-  desktop       desktop  @relation(fields: [desktop_id], references: [id])
-  desktop_id    Int
-  created_at    DateTime @default(now())
-  delivery_date DateTime
+  id            Int       @id @default(autoincrement())
+  title         String    @db.VarChar(200)
+  description   String?   @db.Text()
+  created_at    DateTime  @default(now())
+  delivery_date DateTime?
 
-  listTask listTask[]
-  comment  comment[]
-  file     file[]
+  desktop   desktop? @relation(fields: [desktopId], references: [id])
+  desktopId Int?
 }
 
 model listTask {
-  id      Int    @id @default(autoincrement())
-  name    String @db.VarChar(60)
-  task    task[]
-  card    card   @relation(fields: [card_id], references: [id])
-  card_id Int
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(60)
 }
 
 model task {
   id            Int       @id @default(autoincrement())
   name          String    @db.VarChar(60)
   created_at    DateTime  @default(now())
-  delivery_date DateTime
+  delivery_date DateTime?
   done          Boolean   @default(false)
-  memeberId     Int
-  todo_list     listTask? @relation(fields: [todo_id], references: [id])
-  todo_id       Int
 }
 
 model comment {
@@ -69,14 +57,10 @@ model comment {
   userId       Int
   comment_text String   @db.Text
   created_at   DateTime @default(now())
-  card         card?    @relation(fields: [card_id], references: [id])
-  card_id      Int
 }
 
 model file {
   id         Int      @id @default(autoincrement())
   title      String   @db.VarChar(240)
   created_at DateTime @default(now())
-  card       card?    @relation(fields: [card_id], references: [id])
-  card_id    Int
 }

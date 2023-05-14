@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DesktopService } from './desktop.service';
 import { CreateDesktopDto } from './dto/create-desktop.dto';
 import { UpdateDesktopDto } from './dto/update-desktop.dto';

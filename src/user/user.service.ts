@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma-service/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 
@@ -37,14 +38,21 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.prismaService.users.findUnique({
+      where: { id },
+    });
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  update(id: number, updateUserDto: UpdateUserDto) {
+    return this.prismaService.users.update({
+      where: { id },
+      data: updateUserDto,
+    });
+  }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.prismaService.users.delete({
+      where: { id },
+    });
   }
 }

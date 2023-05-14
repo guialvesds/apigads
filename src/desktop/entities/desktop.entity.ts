@@ -1,12 +1,7 @@
-import { Card } from '../../card/entities/card.entity';
-import { User } from '../../user/entities/user.entity';
-
 export class Desktop {
   id?: number;
   name: string;
-  user_id: number;
+  user_id?: any;
   created_at: Date;
-  link_access: string;
-  card?: Array<Card>;
-  users?: Array<User>;
+  link_access?: string;
 }

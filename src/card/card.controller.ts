@@ -15,9 +15,12 @@ import { UpdateCardDto } from './dto/update-card.dto';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
-  @Post()
-  create(@Body() createCardDto: CreateCardDto) {
-    return this.cardService.create(createCardDto);
+  @Post(':desktopID')
+  create(
+    @Body() createCardDto: CreateCardDto,
+    @Param('desktopID') desktopId: number,
+  ) {
+    return this.cardService.create(createCardDto, desktopId);
   }
 
   @Get()

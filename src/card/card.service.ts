@@ -1,43 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma-service/prisma.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
-import { PrismaService } from 'src/prisma-service/prisma.service';
 import { Card } from './entities/card.entity';
 
 @Injectable()
 export class CardService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createCardDto: CreateCardDto): Promise<Card> {
+  async create(createCardDto: CreateCardDto, desktopId: number): Promise<Card> {
     try {
       const data: Prisma.cardCreateInput = {
         ...createCardDto,
+        desktop: { connect: { id: desktopId } },
       };
 
-      const createCard = await this.prismaService.card.create({ data });
+      const createCardD = await this.prismaService.card.create({ data });
 
       return {
-        ...createCard,
+        ...createCardD,
       };
     } catch (error) {
-      console.log('Erro ao criar usuáro: ', error);
+      console.log('Erro ao criar area de trabalho: ', error);
     }
   }
 
   findAll() {
-    return `This action returns all card`;
+    return this.prismaService.card.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} card`;
+    return this.prismaService.card.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateCardDto: UpdateCardDto) {
-    return `This action updates a #${id} card`;
+    return this.prismaService.card.update({
+      where: { id },
+      data: updateCardDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} card`;
+    return this.prismaService.card.delete({
+      where: { id },
+    });
   }
 }

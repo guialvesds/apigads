@@ -17,7 +17,6 @@ CREATE TABLE "desktop" (
     "user_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "link_access" VARCHAR(240) NOT NULL,
-    "desktop_id" INTEGER NOT NULL,
 
     CONSTRAINT "desktop_pkey" PRIMARY KEY ("id")
 );
@@ -27,7 +26,6 @@ CREATE TABLE "card" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(200) NOT NULL,
     "description" TEXT NOT NULL,
-    "desktop_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "delivery_date" TIMESTAMP(3) NOT NULL,
 
@@ -49,8 +47,6 @@ CREATE TABLE "task" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "delivery_date" TIMESTAMP(3) NOT NULL,
     "done" BOOLEAN NOT NULL DEFAULT false,
-    "memeberId" INTEGER NOT NULL,
-    "todo_id" INTEGER NOT NULL,
 
     CONSTRAINT "task_pkey" PRIMARY KEY ("id")
 );
@@ -76,12 +72,3 @@ CREATE TABLE "file" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
--- AddForeignKey
-ALTER TABLE "desktop" ADD CONSTRAINT "desktop_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "card" ADD CONSTRAINT "card_desktop_id_fkey" FOREIGN KEY ("desktop_id") REFERENCES "desktop"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "task" ADD CONSTRAINT "task_todo_id_fkey" FOREIGN KEY ("todo_id") REFERENCES "listTask"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

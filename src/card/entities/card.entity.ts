@@ -2,7 +2,6 @@ export class Card {
   id?: number;
   title: string;
   description?: string;
-  desktop?: any;
-  created_at: Date;
+  created_at?: Date | string;
   delivery_date?: Date;
 }
