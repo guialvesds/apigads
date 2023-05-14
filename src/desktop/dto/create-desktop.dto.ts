@@ -7,8 +7,7 @@ export class CreateDesktopDto extends Desktop {
   @IsString()
   name: string;
 
-  @IsNumber()
-  user_id: number;
+  user_id: number | any;
 
   created_at: Date;
 

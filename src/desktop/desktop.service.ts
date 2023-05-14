@@ -1,3 +1,4 @@
+import { User } from './../user/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { CreateDesktopDto } from './dto/create-desktop.dto';
@@ -5,20 +6,29 @@ import { UpdateDesktopDto } from './dto/update-desktop.dto';
 import { PrismaService } from 'src/prisma-service/prisma.service';
 import { Desktop } from './entities/desktop.entity';
 
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+
 @Injectable()
 export class DesktopService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createDesktopDto: CreateDesktopDto): Promise<Desktop> {
+  async create(
+    @CurrentUser() user: User,
+    createDesktopDto: CreateDesktopDto,
+  ): Promise<Desktop> {
     try {
       const dataIni: Prisma.desktopCreateInput = {
         ...createDesktopDto,
+        user_id: user.id,
       };
 
       const data = {
         ...dataIni,
-        link_access: `http://localhost:3000/desktop/${dataIni.id}`,
+        link_access: `http://localhost:3000/desktop`,
       };
+
+      console.log(user);
+
       const createdDesktop = await this.prismaService.desktop.create({ data });
 
       return {

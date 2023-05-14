@@ -22,10 +22,10 @@ model users {
 model desktop {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(200)
-  user_id     Int
   created_at  DateTime @default(now())
   link_access String   @db.VarChar(240)
   card        card[]
+  user_id     Int?
 }
 
 model card {

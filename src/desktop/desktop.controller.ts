@@ -6,18 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { DesktopService } from './desktop.service';
 import { CreateDesktopDto } from './dto/create-desktop.dto';
 import { UpdateDesktopDto } from './dto/update-desktop.dto';
+import { AuthRequest } from 'src/auth/models/AuthRequest';
 
 @Controller('desktop')
 export class DesktopController {
   constructor(private readonly desktopService: DesktopService) {}
 
   @Post()
-  create(@Body() createDesktopDto: CreateDesktopDto) {
-    return this.desktopService.create(createDesktopDto);
+  create(
+    @Request() req: AuthRequest,
+    @Body() createDesktopDto: CreateDesktopDto,
+  ) {
+    return this.desktopService.create(req.user, createDesktopDto);
   }
 
   @Get()
