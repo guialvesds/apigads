@@ -15,12 +15,9 @@ import { UpdateCardDto } from './dto/update-card.dto';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
-  @Post(':desktopID')
-  create(
-    @Body() createCardDto: CreateCardDto,
-    @Param('desktopID') desktopId: number,
-  ) {
-    return this.cardService.create(createCardDto, desktopId);
+  @Post(':id')
+  create(@Body() createCardDto: CreateCardDto, @Param('id') id: number) {
+    return this.cardService.create(createCardDto, id);
   }
 
   @Get()
@@ -39,7 +36,7 @@ export class CardController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.cardService.remove(+id);
   }
 }

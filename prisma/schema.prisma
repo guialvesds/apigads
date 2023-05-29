@@ -17,15 +17,18 @@ model users {
   email        String   @unique @db.VarChar(100)
   password     String   @db.VarChar(240)
   created_at   DateTime @default(now())
+  desktop      desktop? @relation(fields: [desktopId], references: [id])
+  desktopId    Int?
 }
 
 model desktop {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(200)
-  created_at  DateTime @default(now())
-  link_access String   @db.VarChar(240)
-  card        card[]
-  user_id     Int?
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(200)
+  created_at     DateTime @default(now())
+  link_access    String   @db.VarChar(240)
+  card           card[]
+  user_id        Int?
+  membersDesktop users[]
 }
 
 model card {

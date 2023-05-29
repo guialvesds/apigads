@@ -7,7 +7,6 @@ export class CreateCardDto extends Card {
   @IsString()
   title: string;
 
-  @IsString()
   description?: string;
 
   created_at: Date;

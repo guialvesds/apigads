@@ -23,8 +23,8 @@ export class UserController {
     return this.userService.findByEmail(email);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get('find/:id')
+  findOne(@Param('id') id: number) {
     return this.userService.findOne(+id);
   }
 

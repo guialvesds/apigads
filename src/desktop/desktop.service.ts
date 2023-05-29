@@ -20,15 +20,12 @@ export class DesktopService {
       const dataIni: Prisma.desktopCreateInput = {
         ...createDesktopDto,
         user_id: user.id,
+        membersDesktop: { connect: { id: user.id } },
       };
-
       const data = {
         ...dataIni,
-        link_access: `http://localhost:3000/desktop`,
+        link_access: 'undefined',
       };
-
-      console.log(user);
-
       const createdDesktop = await this.prismaService.desktop.create({ data });
 
       return {
@@ -40,13 +37,15 @@ export class DesktopService {
   }
 
   findAll() {
-    return this.prismaService.desktop.findMany();
+    return this.prismaService.desktop.findMany({
+      include: { card: true, membersDesktop: true },
+    });
   }
 
   findOne(id: number) {
     return this.prismaService.desktop.findUnique({
-      where: { id },
-      include: { card: true },
+      where: { id: id },
+      include: { card: true, membersDesktop: true },
     });
   }
 
@@ -59,7 +58,39 @@ export class DesktopService {
 
   remove(id: number) {
     return this.prismaService.desktop.delete({
-      where: { id },
+      where: { id: id },
     });
+  }
+
+  async addMemberToDesktop(
+    desktopId: number,
+    userId: number,
+  ): Promise<Desktop> {
+    try {
+      const desktop = await this.prismaService.desktop.findUnique({
+        where: { id: desktopId },
+      });
+      if (!desktop) {
+        throw new Error('Desktop não encontrado');
+      }
+
+      const user = await this.prismaService.users.findUnique({
+        where: { id: userId },
+      });
+      if (!user) {
+        throw new Error('Usuário não encontrado');
+      }
+
+      const updatedDesktop = await this.prismaService.desktop.update({
+        where: { id: desktopId },
+        data: { membersDesktop: { connect: { id: userId } } },
+        include: { membersDesktop: true },
+      });
+
+      return updatedDesktop;
+    } catch (error) {
+      console.log('Erro ao adicionar membro ao desktop: ', error);
+      throw error;
+    }
   }
 }
