@@ -13,19 +13,23 @@ export class DesktopService {
   constructor(private prismaService: PrismaService) {}
 
   async create(
-    @CurrentUser() user: User,
+    @CurrentUser() user: User | any,
     createDesktopDto: CreateDesktopDto,
   ): Promise<Desktop> {
     try {
       const dataIni: Prisma.desktopCreateInput = {
         ...createDesktopDto,
         user_id: user.id,
-        membersDesktop: { connect: { id: user.id } },
+        created_by: user.name,
+        membersDesktop: { connect: [{ id: user.id }] },
       };
       const data = {
         ...dataIni,
         link_access: 'undefined',
       };
+
+      console.log(user);
+
       const createdDesktop = await this.prismaService.desktop.create({ data });
 
       return {
@@ -49,6 +53,22 @@ export class DesktopService {
     });
   }
 
+  // Futura logica para se implementar
+
+  // findOne(id: number, loggedInUserEmail: string) {
+  //   return this.prismaService.desktop.findUnique({
+  //     where: { id: id },
+  //     include: { card: true, membersDesktop: true },
+  //     where: {
+  //       membersDesktop: {
+  //         some: {
+  //           email: loggedInUserEmail,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
   update(id: number, updateUserDto: UpdateDesktopDto) {
     return this.prismaService.desktop.update({
       where: { id },
@@ -70,6 +90,7 @@ export class DesktopService {
       const desktop = await this.prismaService.desktop.findUnique({
         where: { id: desktopId },
       });
+
       if (!desktop) {
         throw new Error('Desktop não encontrado');
       }

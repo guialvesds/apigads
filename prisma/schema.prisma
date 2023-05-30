@@ -11,14 +11,13 @@ datasource db {
 }
 
 model users {
-  id           Int      @id @default(autoincrement())
-  primary_name String   @db.VarChar(20)
-  second_name  String   @db.VarChar(20)
-  email        String   @unique @db.VarChar(100)
-  password     String   @db.VarChar(240)
-  created_at   DateTime @default(now())
-  desktop      desktop? @relation(fields: [desktopId], references: [id])
-  desktopId    Int?
+  id           Int       @id @default(autoincrement())
+  primary_name String    @db.VarChar(20)
+  second_name  String    @db.VarChar(20)
+  email        String    @unique @db.VarChar(100)
+  password     String    @db.VarChar(240)
+  created_at   DateTime  @default(now())
+  desktops     desktop[] @relation("UserToDesktop")
 }
 
 model desktop {
@@ -26,9 +25,10 @@ model desktop {
   name           String   @db.VarChar(200)
   created_at     DateTime @default(now())
   link_access    String   @db.VarChar(240)
+  created_by     String   @db.VarChar(80)
   card           card[]
   user_id        Int?
-  membersDesktop users[]
+  membersDesktop users[]  @relation("UserToDesktop")
 }
 
 model card {

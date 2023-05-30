@@ -12,4 +12,6 @@ export class CreateDesktopDto extends Desktop {
   created_at: Date;
 
   link_access: string;
+
+  created_by: string;
 }
