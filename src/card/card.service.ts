@@ -9,11 +9,16 @@ import { Card } from './entities/card.entity';
 export class CardService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createCardDto: CreateCardDto, desktopId: number): Promise<Card> {
+  async create(
+    createCardDto: CreateCardDto,
+    desktopId: number,
+    // groupCardId: number,
+  ): Promise<Card> {
     try {
       const data: Prisma.cardCreateInput = {
         ...createCardDto,
         desktop: { connect: { id: desktopId } },
+        // groupeCard: { connect: { id: groupCardId } },
       };
 
       const createCardD = await this.prismaService.card.create({ data });

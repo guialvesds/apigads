@@ -16,7 +16,11 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Post(':id')
-  create(@Body() createCardDto: CreateCardDto, @Param('id') id: number) {
+  create(
+    @Body() createCardDto: CreateCardDto,
+    @Param('id') id: number,
+    // @Param('groupCardId') groupCardId: number,
+  ) {
     return this.cardService.create(createCardDto, id);
   }
 

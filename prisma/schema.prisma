@@ -21,14 +21,15 @@ model users {
 }
 
 model desktop {
-  id             Int      @id @default(autoincrement())
-  name           String   @db.VarChar(200)
-  created_at     DateTime @default(now())
-  link_access    String   @db.VarChar(240)
-  created_by     String   @db.VarChar(80)
+  id             Int         @id @default(autoincrement())
+  name           String      @db.VarChar(200)
+  created_at     DateTime    @default(now())
+  link_access    String      @db.VarChar(240)
+  created_by     String      @db.VarChar(80)
   card           card[]
   user_id        Int?
-  membersDesktop users[]  @relation("UserToDesktop")
+  membersDesktop users[]     @relation("UserToDesktop")
+  groupDesktop   groupCard[] @relation("groupToDesktop")
 }
 
 model card {
@@ -40,11 +41,21 @@ model card {
 
   desktop   desktop? @relation(fields: [desktopId], references: [id])
   desktopId Int?
+
+  groupeCard groupCard[] @relation("goupeToCard")
+  listTask   listTask[]
+  comment    comment[]
+  file       file[]
 }
 
 model listTask {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(60)
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(60)
+  created_at DateTime @default(now())
+
+  listCard card?  @relation(fields: [cardId], references: [id])
+  cardId   Int?
+  task     task[]
 }
 
 model task {
@@ -53,6 +64,9 @@ model task {
   created_at    DateTime  @default(now())
   delivery_date DateTime?
   done          Boolean   @default(false)
+
+  taskList listTask? @relation(fields: [listId], references: [id])
+  listId   Int?
 }
 
 model comment {
@@ -60,10 +74,26 @@ model comment {
   userId       Int
   comment_text String   @db.Text
   created_at   DateTime @default(now())
+
+  listCard card? @relation(fields: [cardId], references: [id])
+  cardId   Int?
 }
 
 model file {
   id         Int      @id @default(autoincrement())
   title      String   @db.VarChar(240)
+  link       String   @db.VarChar(240)
   created_at DateTime @default(now())
+
+  listCard card? @relation(fields: [cardId], references: [id])
+  cardId   Int?
+}
+
+model groupCard {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(100)
+  created_at DateTime @default(now())
+
+  cards    card[]    @relation("goupeToCard")
+  desktops desktop[] @relation("groupToDesktop")
 }

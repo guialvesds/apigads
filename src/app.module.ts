@@ -8,9 +8,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt_auth.guard';
 import { DesktopModule } from './desktop/desktop.module';
 import { CardModule } from './card/card.module';
+import { GroupCardModule } from './group-card/group-card.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, DesktopModule, CardModule],
+  imports: [PrismaModule, UserModule, AuthModule, DesktopModule, CardModule, GroupCardModule],
   controllers: [AppController],
   providers: [
     AppService,
