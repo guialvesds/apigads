@@ -11,7 +11,14 @@ import { CardModule } from './card/card.module';
 import { GroupCardModule } from './group-card/group-card.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, DesktopModule, CardModule, GroupCardModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    AuthModule,
+    DesktopModule,
+    CardModule,
+    GroupCardModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

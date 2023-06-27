@@ -40,12 +40,12 @@ export class DesktopController {
     return this.desktopService.update(+id, updateDesktopDto);
   }
 
-  @Patch(':id/addMember/:userId')
+  @Patch(':id/addMember/:userEmail')
   async addMemberToDesktop(
-    @Param('id') id: string,
-    @Param('userId') userId: string,
+    @Param('id') id: number,
+    @Param('userEmail') userEmail: string,
   ) {
-    return this.desktopService.addMemberToDesktop(+id, +userId);
+    return this.desktopService.addMemberToDesktop(+id, userEmail);
   }
 
   @Delete(':id')

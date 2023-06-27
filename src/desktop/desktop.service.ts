@@ -20,7 +20,9 @@ export class DesktopService {
       const dataIni: Prisma.desktopCreateInput = {
         ...createDesktopDto,
         user_id: user.id,
+        user_email: user.email,
         created_by: user.name,
+        created: true,
         membersDesktop: { connect: [{ id: user.id }] },
       };
       const data = {
@@ -84,7 +86,7 @@ export class DesktopService {
 
   async addMemberToDesktop(
     desktopId: number,
-    userId: number,
+    userEmail: string,
   ): Promise<Desktop> {
     try {
       const desktop = await this.prismaService.desktop.findUnique({
@@ -96,7 +98,7 @@ export class DesktopService {
       }
 
       const user = await this.prismaService.users.findUnique({
-        where: { id: userId },
+        where: { email: userEmail },
       });
       if (!user) {
         throw new Error('Usuário não encontrado');
@@ -104,7 +106,7 @@ export class DesktopService {
 
       const updatedDesktop = await this.prismaService.desktop.update({
         where: { id: desktopId },
-        data: { membersDesktop: { connect: { id: userId } } },
+        data: { membersDesktop: { connect: { email: userEmail } } },
         include: { membersDesktop: true },
       });
 

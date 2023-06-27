@@ -28,6 +28,8 @@ model desktop {
   created_by     String      @db.VarChar(80)
   card           card[]
   user_id        Int?
+  user_email     String      @db.VarChar(200)
+  created        Boolean?
   membersDesktop users[]     @relation("UserToDesktop")
   groupDesktop   groupCard[] @relation("groupToDesktop")
 }
