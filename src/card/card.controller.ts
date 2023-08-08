@@ -30,12 +30,12 @@ export class CardController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.cardService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardDto) {
+  update(@Param('id') id: number, @Body() updateCardDto: UpdateCardDto) {
     return this.cardService.update(+id, updateCardDto);
   }
 

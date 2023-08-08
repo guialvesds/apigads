@@ -38,6 +38,7 @@ export class CardService {
   findOne(id: number) {
     return this.prismaService.card.findUnique({
       where: { id },
+      include: { comment: true },
     });
   }
 

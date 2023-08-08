@@ -9,6 +9,7 @@ import { JwtAuthGuard } from './auth/guards/jwt_auth.guard';
 import { DesktopModule } from './desktop/desktop.module';
 import { CardModule } from './card/card.module';
 import { GroupCardModule } from './group-card/group-card.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GroupCardModule } from './group-card/group-card.module';
     DesktopModule,
     CardModule,
     GroupCardModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [

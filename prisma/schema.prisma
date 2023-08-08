@@ -73,11 +73,11 @@ model task {
 
 model comment {
   id           Int      @id @default(autoincrement())
-  userId       Int
+  userId       Int 
   comment_text String   @db.Text
   created_at   DateTime @default(now())
 
-  listCard card? @relation(fields: [cardId], references: [id])
+  card card? @relation(fields: [cardId], references: [id])
   cardId   Int?
 }
 
