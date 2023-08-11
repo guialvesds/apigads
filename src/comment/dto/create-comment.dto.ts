@@ -1,11 +1,11 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateCommentDto {
   id?: number;
 
   userId: number;
 
-  @IsString()
+  @IsOptional()
   comment_text: string;
 
   created_at: Date;

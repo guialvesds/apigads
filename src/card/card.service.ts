@@ -37,21 +37,21 @@ export class CardService {
 
   findOne(id: number) {
     return this.prismaService.card.findUnique({
-      where: { id },
+      where: { id: id },
       include: { comment: true },
     });
   }
 
   update(id: number, updateCardDto: UpdateCardDto) {
     return this.prismaService.card.update({
-      where: { id },
+      where: { id: id },
       data: updateCardDto,
     });
   }
 
   remove(id: number) {
     return this.prismaService.card.delete({
-      where: { id },
+      where: { id: id },
     });
   }
 }

@@ -18,7 +18,7 @@ export class CommentService {
     try {
       const data: Prisma.commentCreateInput = {
         ...createCommentDto,
-        userId: user.id,
+        userComment: { connect: { id: user.id } },
         card: { connect: { id: cardId } },
       };
       const createdComment = this.prismaService.comment.create({ data });
@@ -44,6 +44,8 @@ export class CommentService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} comment`;
+    return this.prismaService.comment.delete({
+      where: { id: id },
+    });
   }
 }
