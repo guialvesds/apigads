@@ -19,6 +19,7 @@ CREATE TABLE "desktop" (
     "created_by" VARCHAR(80) NOT NULL,
     "user_id" INTEGER,
     "user_email" VARCHAR(200) NOT NULL,
+    "created" BOOLEAN,
 
     CONSTRAINT "desktop_pkey" PRIMARY KEY ("id")
 );
@@ -61,6 +62,8 @@ CREATE TABLE "task" (
 CREATE TABLE "comment" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
+    "userName" VARCHAR(140) NOT NULL,
+    "userAvatar" TEXT NOT NULL,
     "comment_text" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "cardId" INTEGER,
@@ -135,6 +138,9 @@ ALTER TABLE "listTask" ADD CONSTRAINT "listTask_cardId_fkey" FOREIGN KEY ("cardI
 
 -- AddForeignKey
 ALTER TABLE "task" ADD CONSTRAINT "task_listId_fkey" FOREIGN KEY ("listId") REFERENCES "listTask"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "comment" ADD CONSTRAINT "comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comment" ADD CONSTRAINT "comment_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "card"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -39,7 +39,7 @@ export class UserService {
 
   findOne(id: number) {
     return this.prismaService.users.findUnique({
-      where: { id },
+      where: { id: id },
     });
   }
 

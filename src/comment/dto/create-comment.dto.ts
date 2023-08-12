@@ -5,6 +5,11 @@ export class CreateCommentDto {
 
   userId: number;
 
+  userName: string;
+
+  @IsOptional()
+  userAvatar: string;
+
   @IsOptional()
   comment_text: string;
 

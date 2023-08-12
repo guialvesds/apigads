@@ -20,6 +20,8 @@ export class CommentService {
         ...createCommentDto,
         userComment: { connect: { id: user.id } },
         card: { connect: { id: cardId } },
+        userName: user.name,
+        userAvatar: 'null',
       };
       const createdComment = this.prismaService.comment.create({ data });
 
