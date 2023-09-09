@@ -19,6 +19,9 @@ model users {
   created_at   DateTime  @default(now())
   desktops     desktop[] @relation("UserToDesktop")
   comment      comment[]
+  // card         card?     @relation(fields: [cardId], references: [id])
+  card         card[]     @relation("UserToCard")
+  cardId       Int?
 }
 
 model desktop {
@@ -42,8 +45,9 @@ model card {
   created_at    DateTime  @default(now())
   delivery_date DateTime?
 
-  desktop   desktop? @relation(fields: [desktopId], references: [id])
-  desktopId Int?
+  desktop     desktop? @relation(fields: [desktopId], references: [id])
+  desktopId   Int?
+  membersCard users[]  @relation("UserToCard")
 
   groupeCard groupCard[] @relation("goupeToCard")
   listTask   listTask[]

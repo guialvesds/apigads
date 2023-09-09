@@ -38,7 +38,7 @@ export class CardService {
   findOne(id: number) {
     return this.prismaService.card.findUnique({
       where: { id: id },
-      include: { comment: true },
+      include: { comment: true, membersCard: true },
     });
   }
 
@@ -53,5 +53,45 @@ export class CardService {
     return this.prismaService.card.delete({
       where: { id: id },
     });
+  }
+
+  async addMembers(id: number, memberIds: number[]) {
+    // Encontre o card pelo ID
+    const card = await this.prismaService.card.findUnique({
+      where: { id: id },
+      include: {
+        // Inclua os membros do card para que possamos adicionar os novos membros
+        membersCard: true,
+      },
+    });
+
+    if (!card) {
+      throw new Error('Card não encontrado');
+    }
+
+    // Verifique se cada membro já faz parte do card e crie uma lista de IDs de membros a serem adicionados
+    const membersToAdd = memberIds.filter((idMember) => {
+      return !card.membersCard.some((member) => member.id === idMember);
+    });
+
+    // Se não houver membros para adicionar, retorne o card atual
+    if (membersToAdd.length === 0) {
+      return card;
+    }
+
+    // Adicione os novos membros ao array de membros do card
+    const updatedCard = await this.prismaService.card.update({
+      where: { id: id },
+      data: {
+        membersCard: {
+          connect: membersToAdd.map((idMember) => ({ id: idMember })),
+        },
+      },
+      include: {
+        membersCard: true, // Certifique-se de incluir os membros atualizados na resposta
+      },
+    });
+
+    return updatedCard;
   }
 }

@@ -43,4 +43,23 @@ export class CardController {
   remove(@Param('id') id: number) {
     return this.cardService.remove(+id);
   }
+
+  @Patch(':id/addMember/:userIds')
+  async addMember(
+    @Param('id') idCard: number,
+    @Param('userIds') userIds: string,
+  ) {
+    // Você precisará dividir a string userIds em um array de números.
+    const userIdsArray = userIds.split(',').map(Number);
+
+    try {
+      const updatedCard = await this.cardService.addMembers(
+        idCard,
+        userIdsArray,
+      );
+      return { message: 'Membros adicionados com sucesso', card: updatedCard };
+    } catch (error) {
+      return { message: error.message }; // Lidar com erros adequados aqui
+    }
+  }
 }
