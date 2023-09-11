@@ -62,4 +62,18 @@ export class CardController {
       return { message: error.message }; // Lidar com erros adequados aqui
     }
   }
+
+  @Patch(':id/removeMember/:userId')
+  async removeMmeber(
+    @Param('id') idCard: number,
+    @Param('userId') userId: number,
+  ) {
+    try {
+      const updateCard = await this.cardService.removeMember(idCard, userId);
+
+      return { message: 'Membro removido com sucesso!', card: updateCard };
+    } catch (error) {
+      return { message: error.message };
+    }
+  }
 }
