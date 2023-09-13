@@ -50,19 +50,19 @@ model card {
   membersCard users[]  @relation("UserToCard")
 
   groupeCard groupCard[] @relation("goupeToCard")
-  listTask   listTask[]
+  listTask   list[]
   comment    comment[]
   file       file[]
 }
 
-model listTask {
+model list {
   id         Int      @id @default(autoincrement())
-  title       String   @db.VarChar(60)
+  title      String   @db.VarChar(60)
   created_at DateTime @default(now())
 
-  listCard card?  @relation(fields: [cardId], references: [id])
-  cardId   Int?
-  task     task[]
+  card   card? @relation(fields: [cardId], references: [id])
+  cardId Int?
+  task      task[]
 }
 
 model task {
@@ -72,7 +72,7 @@ model task {
   delivery_date DateTime?
   done          Boolean   @default(false)
 
-  taskList listTask? @relation(fields: [listId], references: [id])
+  taskList list? @relation(fields: [listId], references: [id])
   listId   Int?
 }
 

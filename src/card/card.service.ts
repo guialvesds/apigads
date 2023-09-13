@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, task } from '@prisma/client';
 import { PrismaService } from 'src/prisma-service/prisma.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
@@ -38,7 +38,15 @@ export class CardService {
   findOne(id: number) {
     return this.prismaService.card.findUnique({
       where: { id: id },
-      include: { comment: true, membersCard: true },
+      include: {
+        comment: true,
+        membersCard: true,
+        listTask: {
+          include: {
+            task: true,
+          },
+        },
+      },
     });
   }
 

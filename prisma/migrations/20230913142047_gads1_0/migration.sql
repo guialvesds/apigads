@@ -6,6 +6,7 @@ CREATE TABLE "users" (
     "email" VARCHAR(100) NOT NULL,
     "password" VARCHAR(240) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "cardId" INTEGER,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -39,7 +40,7 @@ CREATE TABLE "card" (
 -- CreateTable
 CREATE TABLE "listTask" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR(60) NOT NULL,
+    "title" VARCHAR(60) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "cardId" INTEGER,
 
@@ -49,7 +50,7 @@ CREATE TABLE "listTask" (
 -- CreateTable
 CREATE TABLE "task" (
     "id" SERIAL NOT NULL,
-    "name" VARCHAR(60) NOT NULL,
+    "title" VARCHAR(60) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "delivery_date" TIMESTAMP(3),
     "done" BOOLEAN NOT NULL DEFAULT false,
@@ -104,6 +105,12 @@ CREATE TABLE "_groupToDesktop" (
 );
 
 -- CreateTable
+CREATE TABLE "_UserToCard" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_goupeToCard" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -123,6 +130,12 @@ CREATE UNIQUE INDEX "_groupToDesktop_AB_unique" ON "_groupToDesktop"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_groupToDesktop_B_index" ON "_groupToDesktop"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_UserToCard_AB_unique" ON "_UserToCard"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_UserToCard_B_index" ON "_UserToCard"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_goupeToCard_AB_unique" ON "_goupeToCard"("A", "B");
@@ -159,6 +172,12 @@ ALTER TABLE "_groupToDesktop" ADD CONSTRAINT "_groupToDesktop_A_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "_groupToDesktop" ADD CONSTRAINT "_groupToDesktop_B_fkey" FOREIGN KEY ("B") REFERENCES "groupCard"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToCard" ADD CONSTRAINT "_UserToCard_A_fkey" FOREIGN KEY ("A") REFERENCES "card"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToCard" ADD CONSTRAINT "_UserToCard_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_goupeToCard" ADD CONSTRAINT "_goupeToCard_A_fkey" FOREIGN KEY ("A") REFERENCES "card"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,6 +1,5 @@
-export class ListTask {
+export class List {
   id?: number;
   title: string;
   created_at: Date;
-  created_by?: number;
 }
