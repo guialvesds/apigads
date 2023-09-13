@@ -57,7 +57,7 @@ model card {
 
 model listTask {
   id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(60)
+  title       String   @db.VarChar(60)
   created_at DateTime @default(now())
 
   listCard card?  @relation(fields: [cardId], references: [id])
@@ -67,7 +67,7 @@ model listTask {
 
 model task {
   id            Int       @id @default(autoincrement())
-  name          String    @db.VarChar(60)
+  title          String    @db.VarChar(60)
   created_at    DateTime  @default(now())
   delivery_date DateTime?
   done          Boolean   @default(false)

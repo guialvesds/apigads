@@ -10,6 +10,8 @@ import { DesktopModule } from './desktop/desktop.module';
 import { CardModule } from './card/card.module';
 import { GroupCardModule } from './group-card/group-card.module';
 import { CommentModule } from './comment/comment.module';
+import { TaskModule } from './task/task.module';
+import { ListTaskModule } from './list-task/list-task.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { CommentModule } from './comment/comment.module';
     CardModule,
     GroupCardModule,
     CommentModule,
+    TaskModule,
+    ListTaskModule,
   ],
   controllers: [AppController],
   providers: [
