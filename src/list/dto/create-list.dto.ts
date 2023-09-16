@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { List } from '../entities/list.entity';
 
 export class CreateListDto implements List {
