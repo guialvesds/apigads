@@ -20,8 +20,11 @@ model users {
   desktops     desktop[] @relation("UserToDesktop")
   comment      comment[]
   // card         card?     @relation(fields: [cardId], references: [id])
-  card         card[]     @relation("UserToCard")
+  card         card[]    @relation("UserToCard")
   cardId       Int?
+
+  task   task[] @relation("UserToTask")
+  taskId Int?
 }
 
 model desktop {
@@ -60,20 +63,21 @@ model list {
   title      String   @db.VarChar(60)
   created_at DateTime @default(now())
 
-  card   card? @relation(fields: [cardId], references: [id])
+  card   card?  @relation(fields: [cardId], references: [id])
   cardId Int?
-  task      task[]
+  task   task[]
 }
 
 model task {
   id            Int       @id @default(autoincrement())
-  title          String    @db.VarChar(60)
+  title         String    @db.VarChar(60)
   created_at    DateTime  @default(now())
   delivery_date DateTime?
   done          Boolean   @default(false)
 
-  taskList list? @relation(fields: [listId], references: [id])
-  listId   Int?
+  membersTask users[] @relation("UserToTask")
+  taskList    list?   @relation(fields: [listId], references: [id])
+  listId      Int?
 }
 
 model comment {

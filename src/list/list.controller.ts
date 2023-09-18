@@ -23,7 +23,7 @@ export class ListController {
     return this.listService.create(cardId, createListDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.listService.findAll();
   }

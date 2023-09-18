@@ -24,12 +24,21 @@ export class TaskService {
   }
 
   findAll() {
-    return this.prismaService.task.findMany();
+    return this.prismaService.task.findMany({
+      include: {
+        // Inclue os membros do card para que possamos adicionar os novos membros
+        membersTask: true,
+      },
+    });
   }
 
   findOne(id: number) {
     return this.prismaService.task.findUnique({
       where: { id: id },
+      include: {
+        // Inclue os membros do card para que possamos adicionar os novos membros
+        membersTask: true,
+      },
     });
   }
 
@@ -44,5 +53,83 @@ export class TaskService {
     return this.prismaService.task.delete({
       where: { id: id },
     });
+  }
+
+  async addMembers(id: number, memberIds: number[]) {
+    // Encontra a task pelo ID
+    const task = await this.prismaService.task.findUnique({
+      where: { id: id },
+      include: {
+        // Inclue os membros do card para que possamos adicionar os novos membros
+        membersTask: true,
+      },
+    });
+
+    if (!task) {
+      throw new Error('task não encontrado');
+    }
+
+    // Verifica se cada membro já faz parte do card e crie uma lista de IDs de membros a serem adicionados
+    const membersToAdd = memberIds.filter((idMember) => {
+      return !task.membersTask.some((member) => member.id === idMember);
+    });
+
+    // Se não houver membros para adicionar, retorne a task atual
+    if (membersToAdd.length === 0) {
+      return task;
+    }
+
+    // Adiciona os novos membros ao array de membros do card
+    const updatedCard = await this.prismaService.task.update({
+      where: { id: id },
+      data: {
+        membersTask: {
+          connect: membersToAdd.map((idMember) => ({ id: idMember })),
+        },
+      },
+      include: {
+        membersTask: true,
+      },
+    });
+
+    return updatedCard;
+  }
+
+  async removeMember(cardId: number, memberId: number) {
+    // Encontra o card pelo ID
+    const card = await this.prismaService.card.findUnique({
+      where: { id: cardId },
+      include: {
+        membersCard: true,
+      },
+    });
+
+    if (!card) {
+      throw new Error('Card não encontrado');
+    }
+
+    // Verifica se o membro faz parte do card
+    const memberToRemove = card.membersCard.find(
+      (member) => member.id === memberId,
+    );
+
+    if (!memberToRemove) {
+      throw new Error('Membro não encontrado no card');
+    }
+
+    // Remove o membro do card
+    const updatedCard = await this.prismaService.card.update({
+      where: { id: cardId },
+      data: {
+        membersCard: {
+          disconnect: [{ id: memberId }],
+        },
+      },
+      include: {
+        membersCard: true,
+      },
+    });
+
+    return updatedCard;
   }
 }

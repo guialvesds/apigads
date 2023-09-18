@@ -43,7 +43,11 @@ export class CardService {
         membersCard: true,
         listTask: {
           include: {
-            task: true,
+            task: {
+              include: {
+                membersTask: true,
+              },
+            },
           },
         },
       },

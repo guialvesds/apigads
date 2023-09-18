@@ -23,7 +23,7 @@ export class TaskController {
     return this.taskService.create(idList, createTaskDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.taskService.findAll();
   }
@@ -41,5 +41,38 @@ export class TaskController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
+  }
+
+  @Patch(':id/addMember/:userIds')
+  async addMember(
+    @Param('id') idTask: number,
+    @Param('userIds') userIds: string,
+  ) {
+    // Você precisará dividir a string userIds em um array de números.
+    const userIdsArray = userIds.split(',').map(Number);
+
+    try {
+      const updatedCard = await this.taskService.addMembers(
+        idTask,
+        userIdsArray,
+      );
+      return { message: 'Membros adicionados com sucesso', task: updatedCard };
+    } catch (error) {
+      return { message: error.message }; // Lidar com erros adequados aqui
+    }
+  }
+
+  @Patch(':id/removeMember/:userId')
+  async removeMmeber(
+    @Param('id') idTask: number,
+    @Param('userId') userId: number,
+  ) {
+    try {
+      const updateCard = await this.taskService.removeMember(idTask, userId);
+
+      return { message: 'Membro removido com sucesso!', task: updateCard };
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 }

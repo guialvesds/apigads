@@ -26,14 +26,24 @@ export class ListService {
 
   findAll() {
     return this.prismaService.list.findMany({
-      include: { task: true },
+      include: {
+        task: {
+          include: {
+            membersTask: true,
+          },
+        },
+      },
     });
   }
 
   findOne(id: number) {
     return this.prismaService.list.findUnique({
       where: { id: id },
-      include: { task: true },
+      include: {
+        task: {
+          include: { membersTask: true },
+        },
+      },
     });
   }
 
