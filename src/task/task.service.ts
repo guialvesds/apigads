@@ -97,10 +97,10 @@ export class TaskService {
 
   async removeMember(cardId: number, memberId: number) {
     // Encontra o card pelo ID
-    const card = await this.prismaService.card.findUnique({
+    const card = await this.prismaService.task.findUnique({
       where: { id: cardId },
       include: {
-        membersCard: true,
+        membersTask: true,
       },
     });
 
@@ -109,7 +109,7 @@ export class TaskService {
     }
 
     // Verifica se o membro faz parte do card
-    const memberToRemove = card.membersCard.find(
+    const memberToRemove = card.membersTask.find(
       (member) => member.id === memberId,
     );
 
@@ -118,15 +118,15 @@ export class TaskService {
     }
 
     // Remove o membro do card
-    const updatedCard = await this.prismaService.card.update({
+    const updatedCard = await this.prismaService.task.update({
       where: { id: cardId },
       data: {
-        membersCard: {
+        membersTask: {
           disconnect: [{ id: memberId }],
         },
       },
       include: {
-        membersCard: true,
+        membersTask: true,
       },
     });
 
