@@ -25,6 +25,8 @@ model users {
 
   task   task[] @relation("UserToTask")
   taskId Int?
+
+  avatar file[] 
 }
 
 model desktop {
@@ -94,13 +96,18 @@ model comment {
 }
 
 model file {
-  id         Int      @id @default(autoincrement())
-  title      String   @db.VarChar(240)
-  link       String   @db.VarChar(240)
-  created_at DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  fileName      String   @db.VarChar(240)
+  fileNameBd    String   @db.VarChar(240)
+  url           String   @db.VarChar(240)
+  created_at    DateTime @default(now())
+  contentLength Int
+  contentType   String
 
-  listCard card? @relation(fields: [cardId], references: [id])
+  listCard card?  @relation(fields: [cardId], references: [id])
   cardId   Int?
+  users    users? @relation(fields: [usersId], references: [id])
+  usersId  Int?
 }
 
 model groupCard {

@@ -12,6 +12,7 @@ import { GroupCardModule } from './group-card/group-card.module';
 import { CommentModule } from './comment/comment.module';
 import { ListModule } from './list/list.module';
 import { TaskModule } from './task/task.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TaskModule } from './task/task.module';
     CommentModule,
     ListModule,
     TaskModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
