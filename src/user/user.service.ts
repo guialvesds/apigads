@@ -1,3 +1,4 @@
+import { File } from './../file/entities/file.entity';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma-service/prisma.service';
@@ -30,16 +31,20 @@ export class UserService {
   findByEmail(email: string) {
     return this.prismaService.users.findUnique({
       where: { email },
+      include: { avatar: true },
     });
   }
 
   findAll() {
-    return this.prismaService.users.findMany();
+    return this.prismaService.users.findMany({
+      include: { avatar: true },
+    });
   }
 
   findOne(id: number) {
     return this.prismaService.users.findUnique({
       where: { id: id },
+      include: { avatar: true },
     });
   }
 

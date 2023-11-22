@@ -40,6 +40,7 @@ export class CardService {
       where: { id: id },
       include: {
         comment: true,
+        file: true,
         membersCard: true,
         listTask: {
           include: {

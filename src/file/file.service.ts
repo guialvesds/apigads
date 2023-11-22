@@ -4,6 +4,7 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { File } from './entities/file.entity';
 import { env } from 'process';
 import { S3 } from '@aws-sdk/client-s3';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class FileService {
@@ -19,28 +20,56 @@ export class FileService {
     });
   }
 
-  async salvarDados(file: Express.MulterS3.File): Promise<File> {
-    const createdFile = await this.prisma.file.create({
-      data: {
+  async createFileCard(
+    file: Express.MulterS3.File,
+    cardIdObj: any,
+  ): Promise<File | undefined> {
+    try {
+      const cardId = cardIdObj.cardId; // Extraindo o valor de cardId do objeto
+
+      console.log('cardId antes do tratamento:', cardId);
+
+      // Removendo espaços em branco no início e no final e caracteres não numéricos
+      const cleanedCardId = cardId.trim().replace(/[^0-9]/g, '');
+
+      const parsedCardId = parseInt(cleanedCardId, 10);
+
+      if (isNaN(parsedCardId)) {
+        console.error('CardId não é um número válido.');
+        return undefined;
+      }
+
+      const fileData: Prisma.fileCreateInput = {
         fileName: file.key,
         fileNameBd: file.key,
         contentLength: file.size,
         contentType: file.mimetype,
         url: file.location,
-      },
-    });
-    return createdFile;
+        card: { connect: { id: parsedCardId } },
+      };
+
+      const createdFile = await this.prisma.file.create({ data: fileData });
+      console.log('File created:', createdFile);
+      return createdFile;
+    } catch (error) {
+      console.error('Error creating file:', error);
+      throw error;
+    }
   }
 
-  async salvarVariosDados(files: Express.MulterS3.File[]): Promise<File[]> {
+  async createFileCardPlus(
+    files: Express.MulterS3.File[],
+    cardId: number,
+  ): Promise<File[]> {
     const arrayArquivos = files.map((file) => {
-      const arquivo = new File();
-      arquivo.fileName = file.key;
-      arquivo.fileNameBd = file.key;
-      arquivo.contentLength = file.size;
-      arquivo.contentType = file.mimetype;
-      arquivo.url = file.location;
-      return arquivo;
+      return {
+        fileName: file.key,
+        fileNameBd: file.key,
+        contentLength: file.size,
+        contentType: file.mimetype,
+        url: file.location,
+        cardId: cardId, // Usando cardId em vez de card
+      };
     });
 
     // Salva os arquivos no banco de dados

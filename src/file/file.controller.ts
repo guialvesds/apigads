@@ -24,20 +24,27 @@ import { FileService } from './file.service';
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
-  @Post()
+  @Post('card/:cardId')
   @UseInterceptors(FileInterceptor('arquivo', config.multerConfig))
-  async uploadArquivo(@UploadedFile() file: Express.MulterS3.File) {
-    const savedFile = await this.fileService.salvarDados(file);
+  async uploadArquivo(
+    @UploadedFile() file: Express.MulterS3.File,
+    @Param() cardId: any,
+  ) {
+    const savedFile = await this.fileService.createFileCard(file, cardId);
     return savedFile;
   }
 
-  @Post('varios')
+  @Post('card/plus/:cardId')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'arquivo' }], config.multerConfig),
   )
-  async uploadVariosArquivos(@UploadedFiles() files: Express.MulterS3.File[]) {
-    const savedFiles = await this.fileService.salvarVariosDados(
+  async uploadVariosArquivos(
+    @UploadedFiles() files: Express.MulterS3.File[],
+    @Param() cardId: number,
+  ) {
+    const savedFiles = await this.fileService.createFileCardPlus(
       files['arquivo'],
+      cardId,
     );
     return savedFiles;
   }
@@ -49,19 +56,19 @@ export class FileController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: number) {
     const file = this.fileService.findOne(+id);
     return file;
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateFileDto: CreateFileDto) {
+  async update(@Param('id') id: number, @Body() updateFileDto: CreateFileDto) {
     const updatedFile = this.fileService.update(+id, updateFileDto);
     return updatedFile;
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: number) {
     const deletedFile = await this.fileService.remove(+id);
 
     if (!deletedFile) {

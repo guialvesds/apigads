@@ -7,6 +7,7 @@ CREATE TABLE "users" (
     "password" VARCHAR(240) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "cardId" INTEGER,
+    "taskId" INTEGER,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -38,13 +39,13 @@ CREATE TABLE "card" (
 );
 
 -- CreateTable
-CREATE TABLE "listTask" (
+CREATE TABLE "list" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(60) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "cardId" INTEGER,
 
-    CONSTRAINT "listTask_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "list_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -75,10 +76,14 @@ CREATE TABLE "comment" (
 -- CreateTable
 CREATE TABLE "file" (
     "id" SERIAL NOT NULL,
-    "title" VARCHAR(240) NOT NULL,
-    "link" VARCHAR(240) NOT NULL,
+    "fileName" VARCHAR(240) NOT NULL,
+    "fileNameBd" VARCHAR(240) NOT NULL,
+    "url" VARCHAR(240) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "contentLength" INTEGER NOT NULL,
+    "contentType" TEXT NOT NULL,
     "cardId" INTEGER,
+    "usersId" INTEGER,
 
     CONSTRAINT "file_pkey" PRIMARY KEY ("id")
 );
@@ -116,6 +121,12 @@ CREATE TABLE "_goupeToCard" (
     "B" INTEGER NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "_UserToTask" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -143,14 +154,20 @@ CREATE UNIQUE INDEX "_goupeToCard_AB_unique" ON "_goupeToCard"("A", "B");
 -- CreateIndex
 CREATE INDEX "_goupeToCard_B_index" ON "_goupeToCard"("B");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_UserToTask_AB_unique" ON "_UserToTask"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_UserToTask_B_index" ON "_UserToTask"("B");
+
 -- AddForeignKey
 ALTER TABLE "card" ADD CONSTRAINT "card_desktopId_fkey" FOREIGN KEY ("desktopId") REFERENCES "desktop"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "listTask" ADD CONSTRAINT "listTask_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "card"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "list" ADD CONSTRAINT "list_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "card"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "task" ADD CONSTRAINT "task_listId_fkey" FOREIGN KEY ("listId") REFERENCES "listTask"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "task" ADD CONSTRAINT "task_listId_fkey" FOREIGN KEY ("listId") REFERENCES "list"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comment" ADD CONSTRAINT "comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -160,6 +177,9 @@ ALTER TABLE "comment" ADD CONSTRAINT "comment_cardId_fkey" FOREIGN KEY ("cardId"
 
 -- AddForeignKey
 ALTER TABLE "file" ADD CONSTRAINT "file_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "card"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "file" ADD CONSTRAINT "file_usersId_fkey" FOREIGN KEY ("usersId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserToDesktop" ADD CONSTRAINT "_UserToDesktop_A_fkey" FOREIGN KEY ("A") REFERENCES "desktop"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -184,3 +204,9 @@ ALTER TABLE "_goupeToCard" ADD CONSTRAINT "_goupeToCard_A_fkey" FOREIGN KEY ("A"
 
 -- AddForeignKey
 ALTER TABLE "_goupeToCard" ADD CONSTRAINT "_goupeToCard_B_fkey" FOREIGN KEY ("B") REFERENCES "groupCard"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToTask" ADD CONSTRAINT "_UserToTask_A_fkey" FOREIGN KEY ("A") REFERENCES "task"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToTask" ADD CONSTRAINT "_UserToTask_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

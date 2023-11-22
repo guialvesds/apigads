@@ -26,7 +26,7 @@ model users {
   task   task[] @relation("UserToTask")
   taskId Int?
 
-  avatar file[] 
+  avatar file[]
 }
 
 model desktop {
@@ -57,7 +57,7 @@ model card {
   groupeCard groupCard[] @relation("goupeToCard")
   listTask   list[]
   comment    comment[]
-  file       file[]
+  file       file[]      @relation("FileToCard")
 }
 
 model list {
@@ -104,10 +104,9 @@ model file {
   contentLength Int
   contentType   String
 
-  listCard card?  @relation(fields: [cardId], references: [id])
-  cardId   Int?
-  users    users? @relation(fields: [usersId], references: [id])
-  usersId  Int?
+  users   users? @relation(fields: [usersId], references: [id])
+  usersId Int?
+  card    card[] @relation("FileToCard")
 }
 
 model groupCard {

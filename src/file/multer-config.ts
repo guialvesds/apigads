@@ -29,11 +29,14 @@ export const multerConfig = {
         '.docx',
         '.xlsx',
         '.txt',
+        '.pdf',
       ];
       const fileExt = path.extname(file.originalname).toLowerCase();
       if (!allowedExtensions.includes(fileExt)) {
         return cb(new Error('Tipo de arquivo não suportado.'));
       }
+
+      console.log('Dados', file.size);
 
       // Verificando o tamanho do arquivo (2MB no máximo)
       if (file.size > 2 * 1024 * 1024) {

@@ -1,9 +1,9 @@
 export class File {
-  id: number;
+  id?: number;
   fileName: string;
   fileNameBd: string;
   url: string;
-  created_at: Date;
+  created_at?: Date;
   contentLength: number;
   contentType: string;
 }
