@@ -27,8 +27,6 @@ export class FileService {
     try {
       const cardId = cardIdObj.cardId; // Extraindo o valor de cardId do objeto
 
-      console.log('cardId antes do tratamento:', cardId);
-
       // Removendo espaços em branco no início e no final e caracteres não numéricos
       const cleanedCardId = cardId.trim().replace(/[^0-9]/g, '');
 
@@ -47,6 +45,10 @@ export class FileService {
         url: file.location,
         card: { connect: { id: parsedCardId } },
       };
+
+      if (fileData.contentLength > 2 * 1024 * 1024) {
+        throw new Error('Arquivo não suportado');
+      }
 
       const createdFile = await this.prisma.file.create({ data: fileData });
       console.log('File created:', createdFile);
